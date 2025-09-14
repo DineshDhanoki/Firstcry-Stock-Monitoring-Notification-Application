@@ -2,3 +2,6 @@ requests
 pyyaml
 beautifulsoup4
 PyGithub
+python-dotenv
+twilio
+python-telegram-bot

@@ -6,11 +6,14 @@ It runs automatically every 15 minutes using **GitHub Actions**, so it works eve
 ---
 
 ## 🚀 Features
-- Add products (by URL + pincode) to monitor
-- Notifications via **Telegram** and/or **Email**
-- GitHub Actions automation → no local machine needed
-- Update product list directly from **GitHub Issues**
-- Always checks stock at **MRP price** (FirstCry always sells MRP)
+- **🤖 Interactive Telegram Bot** - Browse and add products directly in Telegram
+- **🔍 Complete HotWheels Catalog** - View all HotWheels products from FirstCry
+- **📱 Telegram Menu Interface** - No more terminal commands needed
+- **🔔 Smart Notifications** - Get notified when products are back in stock
+- **📍 Pincode Support** - Check availability for your location
+- **📋 Watchlist Management** - Add/remove products through Telegram
+- **🧪 Test Mode** - Test notifications before going live
+- **🔒 Secure Setup** - Environment variables for credentials
 
 ---
 
@@ -18,10 +21,19 @@ It runs automatically every 15 minutes using **GitHub Actions**, so it works eve
 ```
 hotwheels-monitor/
 │
-├── monitor.py                # Main script (menu + monitor logic)
+├── monitor.py                # Main monitoring script
+├── telegram_bot.py           # Interactive Telegram bot interface
+├── firstcry_scraper.py       # FirstCry product scraper
 ├── requirements.txt           # Python dependencies
 ├── config.yaml                # Product + pincode list (auto-created)
 ├── state.json                 # Cache (do not edit manually)
+├── .env                       # Environment variables (create from env.example)
+├── env.example                # Sample environment configuration
+├── test_telegram.py           # Test Telegram notifications
+├── test_whatsapp.py           # Test WhatsApp notifications
+├── test_bot.py                # Test bot functionality
+├── stop_bot.py                # Stop running bot
+├── TESTING_GUIDE.md           # Comprehensive testing instructions
 │
 ├── scripts/
 │   └── issue_handler.py       # Handles GitHub Issues → config updates
@@ -54,15 +66,43 @@ Go to **Repo → Settings → Secrets and variables → Actions** and add:
 - `SMTP_PASSWORD`
 - `SMTP_FROM_EMAIL`
 - `SMTP_TO_EMAILS` (comma separated list)
+- `SMTP_USE_TLS` = true
+
+#### WhatsApp (optional)
+- `TWILIO_ACCOUNT_SID` = your Twilio account SID
+- `TWILIO_AUTH_TOKEN` = your Twilio auth token
+- `TWILIO_WHATSAPP_FROM` = whatsapp:+14155238886 (sandbox number)
+- `TWILIO_WHATSAPP_TO` = whatsapp:+your_phone_number
 
 ### 3. First Time Setup (Local)
-Run this locally once to add products:
-```bash
-pip install -r requirements.txt
-python monitor.py
-```
-This will create `config.yaml` with your product list and pincode.  
-Commit + push it to GitHub.
+
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Configure Telegram bot:**
+   ```bash
+   cp env.example .env
+   # Edit .env with your Telegram bot token and chat ID
+   ```
+
+3. **Test your setup:**
+   ```bash
+   python test_telegram.py    # Test basic notifications
+   python test_bot.py         # Test bot functionality
+   ```
+
+4. **Start the Telegram bot:**
+   ```bash
+   python telegram_bot.py
+   ```
+
+5. **Use the bot in Telegram:**
+   - Search for `@Hotwheels_stock_bot`
+   - Send `/start` to see the menu
+   - Browse HotWheels products and add to watchlist
+   - Test notifications through the bot
 
 ### 4. Automated Runs
 - GitHub Actions (`.github/workflows/monitor.yml`) runs every 15 minutes.
@@ -85,6 +125,28 @@ To add/remove products:
    ```
 
 The Action will update `config.yaml` automatically.
+
+---
+
+## 🧪 Testing
+
+### Local Testing
+1. **Test individual channels:**
+   ```bash
+   python test_telegram.py    # Test Telegram
+   python test_whatsapp.py    # Test WhatsApp
+   ```
+
+2. **Test all channels:**
+   ```bash
+   python monitor.py --test
+   ```
+
+3. **Full testing guide:** See [TESTING_GUIDE.md](TESTING_GUIDE.md) for detailed instructions.
+
+### GitHub Actions Testing
+- Go to Actions tab → "HotWheels Monitor" → "Run workflow"
+- Check logs to verify notifications are sent
 
 ---
 

@@ -1,0 +1,14 @@
+products:
+- id: test1
+  title: Test HotWheels Car
+  url: https://www.firstcry.com/hotwheels/test-car/123456
+  pincode: '400001'
+- id: prod2
+  title: Hot wheels
+  url: ''
+  pincode: '401209'
+- id: prod3
+  title: Hot Wheels Turtles Party Wagon  Die-Cast Free Wheels...
+  url: https://www.firstcry.com//www.firstcry.com/hot-wheels/hot-wheels-turtles-party-wagon-die-cast-free-wheels-toy-car-color-and-style-may-vary/19124500/product-detail
+  pincode: '401209'
+delay_between_requests: 3
